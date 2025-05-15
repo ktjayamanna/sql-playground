@@ -3,25 +3,22 @@
 # Container name - consistent across all questions
 CONTAINER_NAME="postgres-sql-practice"
 
-# Prompt for folder name if not provided as argument
+# Prompt for SQL file path if not provided as argument
 if [ $# -eq 0 ]; then
-    echo "Enter the folder name (e.g., matching_skills):"
-    read FOLDER_NAME
+    echo "Enter the relative path to the add_data.sql file (e.g., matching_skills/queries/add_data.sql):"
+    read SQL_PATH
 else
-    FOLDER_NAME=$1
+    SQL_PATH=$1
 fi
 
-# Check if the folder exists
-if [ ! -d "$FOLDER_NAME" ]; then
-    echo "Error: Folder '$FOLDER_NAME' not found!"
+# Check if the SQL file exists
+if [ ! -f "$SQL_PATH" ]; then
+    echo "Error: File '$SQL_PATH' not found!"
     exit 1
 fi
 
-# Check if the add_data.sql file exists
-if [ ! -f "$FOLDER_NAME/queries/add_data.sql" ]; then
-    echo "Error: File '$FOLDER_NAME/queries/add_data.sql' not found!"
-    exit 1
-fi
+# Extract the folder name from the path for reference
+FOLDER_NAME=$(dirname "$SQL_PATH" | sed 's/\/queries//')
 
 # Stop and remove existing container if it exists
 if [ "$(docker ps -aq -f name=^/${CONTAINER_NAME}$)" ]; then
@@ -43,9 +40,9 @@ docker run --name ${CONTAINER_NAME} \
 echo "Waiting for PostgreSQL to start..."
 sleep 5
 
-# Load data from the specified folder's add_data.sql
-echo "Loading data from $FOLDER_NAME/queries/add_data.sql..."
-docker exec -i ${CONTAINER_NAME} psql -U postgres -d postgres < "$FOLDER_NAME/queries/add_data.sql"
+# Load data from the specified SQL file
+echo "Loading data from $SQL_PATH..."
+docker exec -i ${CONTAINER_NAME} psql -U postgres -d postgres < "$SQL_PATH"
 
 echo "Container setup complete!"
 echo "Container: ${CONTAINER_NAME}"

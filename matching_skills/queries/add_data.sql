@@ -1,12 +1,14 @@
 -- Create tables for Data Science Skills Matching question
 
 -- Create candidates table according to the problem statement
+DROP TABLE IF EXISTS candidates;
 CREATE TABLE candidates (
-    candidate_id INTEGER PRIMARY KEY,
-    skill VARCHAR(100) NOT NULL
+    candidate_id INTEGER,
+    skill VARCHAR(100) NOT NULL,
+    PRIMARY KEY (candidate_id, skill)
 );
 
--- Insert sample data as shown in the problem statement
+-- Insert sample data EXACTLY as shown in the problem statement
 INSERT INTO candidates (candidate_id, skill) VALUES
     (123, 'Python'),
     (123, 'Tableau'),
@@ -16,23 +18,6 @@ INSERT INTO candidates (candidate_id, skill) VALUES
     (234, 'SQL Server'),
     (345, 'Python'),
     (345, 'Tableau');
-
--- Add some additional test data
-INSERT INTO candidates (candidate_id, skill) VALUES
-    (456, 'Python'),
-    (456, 'PostgreSQL'),
-    (456, 'R'),
-    (567, 'Tableau'),
-    (567, 'PostgreSQL'),
-    (567, 'Python'),
-    (678, 'Python'),
-    (678, 'Tableau'),
-    (678, 'PostgreSQL'),
-    (678, 'R'),
-    (789, 'PostgreSQL'),
-    (789, 'SQL Server'),
-    (890, 'Tableau'),
-    (890, 'PowerBI');
 
 -- The required skills for the Data Science job are:
 -- 1. Python
